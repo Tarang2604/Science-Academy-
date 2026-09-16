@@ -1,0 +1,165 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+enum LeadType {
+  ADMISSION
+  DEMO
+  CONSULTATION
+  CONTACT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  CONVERTED
+  CLOSED
+}
+
+enum SubjectType {
+  PHYSICS
+  CHEMISTRY
+  MATHEMATICS
+  BIOLOGY
+  COMMERCE
+  INFORMATICS_PRACTICES
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed with bcrypt
+  name      String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lead {
+  id              String     @id @default(uuid())
+  type            LeadType   @default(CONTACT)
+  status          LeadStatus @default(NEW)
+  name            String
+  phone           String
+  email           String?
+  targetClass     String?    // e.g. "Class 11", "Class 12", "Target Batch"
+  subjects        String?    // Comma-separated list or subject code
+  persona         String?    // "STUDENT" | "PARENT"
+  preferredTiming String?
+  message         String?
+  notes           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Course {
+  id          String      @id @default(uuid())
+  slug        String      @unique
+  name        String
+  subject     SubjectType
+  tagline     String
+  description String
+  overview    String
+  curriculum  Json        // Structured syllabus breakdown
+  isVerified  Boolean     @default(true)
+  batches     Batch[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Faculty {
+  id             String      @id @default(uuid())
+  slug           String      @unique
+  name           String
+  subject        SubjectType
+  qualification  String
+  experienceYrs  Int?
+  bio            String
+  photoUrl       String?
+  isVerified     Boolean     @default(false) // Verified authenticity flag
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Batch {
+  id          String   @id @default(uuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  name        String   // e.g. "Class 11 Science - Batch A"
+  timing      String   // e.g. "08:00 AM - 10:00 AM"
+  startDate   String
+  status      String   @default("OPEN") // OPEN, FILLING_FAST, CLOSED
+  totalSeats  Int      @default(30)
+  filledSeats Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Topper {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  studentName String
+  examName    String   // e.g. "CBSE Class 12", "JEE Main"
+  year        Int
+  score       String   // e.g. "98.4%" or "AIR 452"
+  subject     String?
+  photoUrl    String?
+  story       String?
+  isVerified  Boolean  @default(false)
+  status      String   @default("DRAFT") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  createdAt   DateTime @default(now())
+}
+
+model Testimonial {
+  id          String   @id @default(uuid())
+  authorName  String
+  authorRole  String   // e.g. "Class 12 Student", "Parent of Aarav"
+  content     String
+  rating      Int      @default(5)
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Interview {
+  id           String   @id @default(uuid())
+  title        String
+  studentName  String
+  videoUrl     String
+  thumbnailUrl String?
+  category     String   // "TOPPER", "PARENT", "FACULTY"
+  isVerified   Boolean  @default(false)
+  status       String   @default("DRAFT") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  createdAt    DateTime @default(now())
+}
+
+model GalleryItem {
+  id          String   @id @default(uuid())
+  title       String
+  category    String   // "CLASSROOM", "FACULTY", "EVENTS", "LABS"
+  imageUrl    String
+  caption     String?
+  isVerified  Boolean  @default(false)
+  status      String   @default("DRAFT") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  category    String
+  author      String   @default("Science Academy Academic Team")
+  status      String   @default("DRAFT") // "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  publishedAt DateTime @default(now())
+}

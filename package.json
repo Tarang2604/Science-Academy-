@@ -1,0 +1,29 @@
+{
+  "name": "science-academy-ratlam",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Science Academy Ratlam - Premium Digital Education Platform",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^26.5.1",
+    "concurrently": "^8.2.2",
+    "prisma": "5.19.0",
+    "tsx": "^4.19.0",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@prisma/client": "5.19.0",
+    "bcryptjs": "^3.0.3"
+  }
+}
