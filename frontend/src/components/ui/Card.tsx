@@ -11,9 +11,10 @@ export const Card: React.FC<CardProps> = ({
   className = '',
   hoverEffect = true,
 }) => {
+  const hasBgClass = className.includes('bg-');
   return (
     <div
-      className={`bg-white rounded-[24px] border border-slate-200/80 p-6 md:p-8 shadow-card transition-all duration-300 ${
+      className={`${hasBgClass ? '' : 'bg-white'} rounded-[24px] border border-slate-200/80 p-6 md:p-8 shadow-card transition-all duration-300 ${
         hoverEffect ? 'hover:shadow-lg hover:-translate-y-1 hover:border-slate-300' : ''
       } ${className}`}
     >
