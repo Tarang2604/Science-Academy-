@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Phone, ArrowRight, Sparkles } from 'lucide-react';
+import { Menu, X, ArrowRight, Sparkles, Instagram } from 'lucide-react';
 import { ACADEMY_CONFIG } from '../../config/academy';
 import { Button } from '../ui/Button';
 
@@ -18,18 +18,12 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ onOpenEnquiryMod
       <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 p-2 bg-slate-50/90 rounded-full border border-slate-200/80 shadow-sm">
         
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white transition-colors">
-          <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-            SA
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-navy-900 tracking-tight leading-none">
-              SCIENCE ACADEMY
-            </span>
-            <span className="text-[10px] text-slate-500 font-medium tracking-wider uppercase mt-0.5">
-              Ratlam, MP
-            </span>
-          </div>
+        <Link to="/" className="flex items-center px-3 py-1 rounded-full hover:bg-white/90 transition-all group shrink-0">
+          <img 
+            src="/images/logo.png" 
+            alt="Science Academy Logo" 
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain mix-blend-multiply scale-125 origin-left transition-transform group-hover:scale-130"
+          />
         </Link>
 
         {/* Center Desktop Navigation Pills */}
@@ -60,11 +54,14 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ onOpenEnquiryMod
         {/* Right CTA Actions */}
         <div className="hidden sm:flex items-center gap-2">
           <a
-            href={`tel:${ACADEMY_CONFIG.verifiedContact.phoneRaw}`}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-navy-900 transition-colors"
+            href={ACADEMY_CONFIG.verifiedContact.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-pink-700 bg-pink-50 hover:bg-pink-100 border border-pink-200/80 rounded-full transition-all shadow-2xs"
+            aria-label="Follow Science Academy on Instagram"
           >
-            <Phone className="w-3.5 h-3.5 text-royal-600" />
-            <span>{ACADEMY_CONFIG.verifiedContact.phoneDisplay}</span>
+            <Instagram className="w-3.5 h-3.5 text-pink-600" />
+            <span>Instagram</span>
           </a>
 
           <Button
@@ -113,6 +110,17 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ onOpenEnquiryMod
               ))}
 
               <div className="pt-3 mt-2 border-t border-slate-100 flex flex-col gap-2">
+                <a
+                  href={ACADEMY_CONFIG.verifiedContact.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-pink-700 bg-pink-50 border border-pink-200/80 hover:bg-pink-100 transition-colors"
+                >
+                  <Instagram className="w-4 h-4 text-pink-600" />
+                  <span>Follow @scienceacademyrtm</span>
+                </a>
+
                 <Button
                   variant="primary"
                   size="md"
@@ -133,3 +141,4 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({ onOpenEnquiryMod
     </header>
   );
 };
+
